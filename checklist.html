@@ -3,28 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Retiro Unidos - CDR</title>
-<meta name="description" content="Cronograma do Retiro Unidos — Comunidade do Reino. Horários, cultos e escala do fim de semana.">
+<title>Checklist · Retiro Unidos - CDR</title>
+<meta name="description" content="Checklist da viagem do Retiro Unidos — Comunidade do Reino. Marque o que já separou e não esqueça nada.">
 <meta name="theme-color" content="#F2F1EC">
-<link rel="canonical" href="https://cdr-retiro.netlify.app/">
+<link rel="canonical" href="https://cdr-retiro.netlify.app/checklist.html">
 <link rel="icon" href="og.png">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Retiro Unidos - CDR">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:url" content="https://cdr-retiro.netlify.app/">
-<meta property="og:title" content="Retiro Unidos - CDR">
-<meta property="og:description" content="Cronograma do retiro — horários, cultos e escala do fim de semana.">
+<meta property="og:url" content="https://cdr-retiro.netlify.app/checklist.html">
+<meta property="og:title" content="Checklist · Retiro Unidos - CDR">
+<meta property="og:description" content="Checklist da viagem — marque o que já separou e não esqueça nada.">
 <meta property="og:image" content="https://cdr-retiro.netlify.app/og.png">
 <meta property="og:image:secure_url" content="https://cdr-retiro.netlify.app/og.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Retiro Unidos — cronograma, Comunidade do Reino">
+<meta property="og:image:alt" content="Retiro Unidos — checklist da viagem, Comunidade do Reino">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Retiro Unidos - CDR">
-<meta name="twitter:description" content="Cronograma do retiro — horários, cultos e escala do fim de semana.">
+<meta name="twitter:title" content="Checklist · Retiro Unidos - CDR">
+<meta name="twitter:description" content="Checklist da viagem — marque o que já separou e não esqueça nada.">
 <meta name="twitter:image" content="https://cdr-retiro.netlify.app/og.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,6 +41,7 @@
     --ink-soft:   #6A6A63;
     --blue:       #2A20C9;
     --blue-deep:  #1B1490;
+    --check:      #2A20C9;
   }
   [data-theme="dark"] {
     --paper:      #14151A;
@@ -52,6 +53,7 @@
     --ink-soft:   #9A9C9F;
     --blue:       #8E88FF;
     --blue-deep:  #B4AFFF;
+    --check:      #8E88FF;
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -72,11 +74,18 @@
     transition: background-color .25s, color .25s;
   }
 
-  .wrap { width: 100%; max-width: 600px; margin-inline: auto; }
+  .wrap {
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+  }
 
   /* ---------- topo ---------- */
-  .brand { text-align: center; margin-bottom: 34px; }
-  .brand img { width: 190px; max-width: 62%; height: auto; opacity: .92; }
+  .brand { text-align: center; margin-bottom: 30px; }
+  .brand img {
+    width: 190px; max-width: 62%; height: auto;
+    opacity: .92;
+  }
   [data-theme="dark"] .brand img { filter: invert(1) hue-rotate(180deg) brightness(1.18); opacity: .9; }
 
   h1 {
@@ -97,14 +106,46 @@
     text-transform: uppercase;
     color: var(--ink-soft);
   }
-  .dates {
-    margin: 14px 0 0;
-    font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--blue); font-weight: 500;
+
+  /* ---------- progresso ---------- */
+  .progress {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: 34px auto 26px;
+    max-width: 440px;
+    padding: 13px 0 11px;
+    background: var(--paper);
+  }
+  .progress::before {
+    content: "";
+    position: absolute;
+    left: 50%; top: 0;
+    width: 100vw; height: 100%;
+    transform: translateX(-50%);
+    background: var(--paper);
+    z-index: -1;
+  }
+  .progress-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 9px;
+  }
+  .progress-top b { color: var(--blue); font-weight: 600; font-size: 13px; }
+  .bar {
+    height: 3px; background: var(--line); position: relative; overflow: hidden;
+  }
+  .bar > i {
+    position: absolute; inset: 0 auto 0 0; width: 0%;
+    background: var(--blue); transition: width .45s cubic-bezier(.22,.7,.3,1);
   }
 
-  /* ---------- seções (dias) ---------- */
-  .section { background: var(--card); border: 1px solid var(--hairline); margin-bottom: 28px; }
+  /* ---------- seções ---------- */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    margin-bottom: 28px;
+  }
   [data-theme="dark"] .section { border-color: var(--line); }
 
   .section-head {
@@ -112,6 +153,7 @@
     border-bottom: 1px solid var(--hairline);
     padding: 17px 16px;
     text-align: center;
+    position: relative;
   }
   [data-theme="dark"] .section-head { border-bottom-color: var(--line); }
   .section-head h2 {
@@ -121,97 +163,83 @@
     letter-spacing: .21em;
     text-transform: uppercase;
   }
-  .section-head .sec-date {
-    display: block;
-    margin-top: 7px;
-    font-size: 11px; font-weight: 400;
-    letter-spacing: .16em; text-transform: uppercase;
-    color: var(--blue);
+  .section-head .sec-count {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 11px; letter-spacing: .08em; color: var(--ink-soft);
     font-variant-numeric: tabular-nums;
   }
-  .section-head .sec-date::before,
-  .section-head .sec-date::after {
-    content: ""; display: inline-block;
-    width: 16px; height: 1px; background: var(--line);
-    vertical-align: middle; margin: 0 10px 2px;
-  }
 
-  .list { list-style: none; margin: 0; padding: 18px 20px 24px; }
+  .list { list-style: none; margin: 0; padding: 16px 20px 22px; }
 
-  .ev {
-    display: grid;
-    grid-template-columns: 74px 1fr;
-    gap: 14px;
-    padding: 4px 0 12px;
+  .item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 4px 0 9px;
     border-bottom: 1px solid var(--line);
-    margin-bottom: 12px;
+    margin-bottom: 9px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
   }
-  .ev:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 2px; }
+  .item:last-child { margin-bottom: 0; }
 
-  .time {
-    font-size: 12.5px; font-weight: 500; letter-spacing: .04em;
-    color: var(--ink); padding-top: 7px;
-    font-variant-numeric: tabular-nums; white-space: nowrap;
+  .item input { position: absolute; opacity: 0; pointer-events: none; }
+
+  .box {
+    flex: 0 0 auto;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1.5px solid var(--hairline);
+    background: transparent;
+    position: relative;
+    transition: border-color .18s, background .18s, transform .12s;
   }
-  .time span { display: block; font-weight: 300; color: var(--ink-soft); font-size: 11px; }
+  [data-theme="dark"] .box { border-color: var(--line); }
+  .item:hover .box { border-color: var(--blue); }
+  .item:active .box { transform: scale(.9); }
 
-  .title {
+  .box::after {
+    content: "";
+    position: absolute; left: 8.5px; top: 4px;
+    width: 6px; height: 12px;
+    border: solid var(--check); border-width: 0 2.2px 2.2px 0;
+    transform: rotate(43deg) scale(0);
+    transform-origin: center;
+    transition: transform .18s cubic-bezier(.3,1.5,.5,1);
+  }
+  .item.done .box { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 8%, transparent); }
+  .item.done .box::after { transform: rotate(43deg) scale(1); }
+
+  .label {
     font-family: 'Caveat', 'Segoe Script', cursive;
     font-size: clamp(21px, 5.4vw, 27px);
-    font-weight: 500; line-height: 1.15;
-    color: var(--blue); padding-top: 3px;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--blue);
+    padding-top: 3px;
+    transition: opacity .2s;
   }
-  .tag {
-    display: inline-block; vertical-align: middle;
-    font-family: 'Jost', sans-serif; font-size: 9px; font-weight: 500;
-    letter-spacing: .16em; text-transform: uppercase;
-    color: var(--blue); border: 1px solid var(--blue);
-    padding: 3px 7px 2px; margin-left: 8px; opacity: .75;
-  }
+  .item.done .label { opacity: .42; text-decoration: line-through; text-decoration-thickness: 1.2px; }
 
-  .escala { margin-top: 7px; display: flex; flex-wrap: wrap; gap: 4px 18px; }
-  .escala div {
-    font-size: 11px; letter-spacing: .08em; color: var(--ink-soft);
-    text-transform: uppercase;
+  .note {
+    font-family: 'Jost', sans-serif;
+    font-size: .58em;
+    letter-spacing: .04em;
+    color: var(--ink-soft);
+    white-space: nowrap;
   }
-  .escala b { color: var(--ink); font-weight: 500; letter-spacing: .04em; }
-
-  /* ---------- link para o checklist ---------- */
-  .cta {
-    display: block; text-align: center; text-decoration: none;
-    background: var(--card); border: 1px solid var(--hairline);
-    padding: 22px 18px; margin-bottom: 28px;
-    transition: border-color .18s;
-  }
-  [data-theme="dark"] .cta { border-color: var(--line); }
-  .cta:hover { border-color: var(--blue); }
-  .cta .k {
-    display: block; font-size: 10px; letter-spacing: .2em;
-    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px;
-  }
-  .cta .v {
-    font-family: 'Caveat', cursive; font-size: clamp(23px, 6vw, 29px);
-    color: var(--blue); line-height: 1.1;
-  }
-  .cta .arrow { font-family: 'Jost', sans-serif; font-size: .62em; margin-left: 6px; }
-
-  /* ---------- aviso offline ---------- */
-  .offline-tip {
-    border: 1px solid var(--line);
-    padding: 14px 16px; margin-bottom: 26px;
-    font-size: 11px; letter-spacing: .1em; line-height: 1.9;
-    text-transform: uppercase; color: var(--ink-soft); text-align: center;
-  }
-  .offline-tip b { color: var(--blue); font-weight: 500; }
 
   /* ---------- rodapé ---------- */
-  .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+  .actions {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-top: 34px;
+  }
   .btn {
     font-family: 'Jost', sans-serif;
     font-size: 11px; letter-spacing: .17em; text-transform: uppercase;
     padding: 13px 24px;
-    background: transparent; border: 1px solid var(--hairline);
-    color: var(--ink); cursor: pointer; text-decoration: none;
+    background: transparent;
+    border: 1px solid var(--hairline);
+    color: var(--ink);
+    cursor: pointer;
     transition: background .18s, color .18s, border-color .18s;
   }
   [data-theme="dark"] .btn { border-color: var(--line); }
@@ -235,6 +263,18 @@
     color: var(--ink-soft); line-height: 2;
   }
 
+  /* ---------- comemoração ---------- */
+  .done-banner {
+    max-width: 440px; margin: 0 auto 26px;
+    border: 1px solid var(--blue);
+    padding: 15px 18px; text-align: center;
+    font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--blue);
+    display: none;
+  }
+  .done-banner.show { display: block; animation: pop .35s ease; }
+  @keyframes pop { from { opacity: 0; transform: translateY(-6px); } }
+
   /* ---------- estado temporário durante a geração do PDF ---------- */
   body.exporting {
     background: #fff !important;
@@ -242,14 +282,28 @@
   }
   body.exporting .theme-toggle,
   body.exporting .actions,
-  body.exporting .offline-tip,
-  body.exporting .cta { display: none !important; }
+  body.exporting .progress,
+  body.exporting .done-banner { display: none !important; }
   body.exporting .section { margin-bottom: 20px; }
+  /* marca sólida: mais confiável que a rotação no rasterizador */
+  body.exporting .item.done .box {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  body.exporting .item.done .box::after { display: none; }
+  body.exporting .item.done .box::before {
+    content: "\2713";
+    position: absolute; inset: 0;
+    color: #fff; font-family: 'Jost', sans-serif; font-size: 15px;
+    line-height: 23px; text-align: center;
+  }
 
+  /* telas largas: mais respiro, sem esticar a coluna */
   @media (min-width: 900px) {
     .brand img { width: 210px; }
     .section { margin-bottom: 34px; }
-    .list { padding: 22px 30px 28px; }
+    .list { padding: 20px 30px 26px; }
+    .item { gap: 16px; padding-bottom: 11px; margin-bottom: 11px; }
   }
 
   @page { margin: 12mm; }
@@ -258,7 +312,8 @@
     /* força o tema claro e mantém fundos/cores na impressão */
     :root, [data-theme="dark"] {
       --paper: #FFFFFF; --card: #FFFFFF; --band: #E4E5DE; --line: #C9C7BF;
-      --hairline: #1A1A1A; --ink: #1E1E1E; --ink-soft: #6A6A63; --blue: #2A20C9;
+      --hairline: #1A1A1A; --ink: #1E1E1E; --ink-soft: #6A6A63;
+      --blue: #2A20C9; --check: #2A20C9;
     }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
@@ -266,23 +321,60 @@
     body { padding: 0; background-image: none !important; }
     .wrap { max-width: 100%; }
 
-    .theme-toggle, .actions, .offline-tip, .cta { display: none !important; }
+    .theme-toggle, .actions, .progress, .done-banner { display: none !important; }
     [data-theme="dark"] .brand img { filter: none !important; }
     [data-theme="dark"] .section,
-    [data-theme="dark"] .section-head { border-color: var(--hairline) !important; }
+    [data-theme="dark"] .section-head,
+    [data-theme="dark"] .box { border-color: var(--hairline) !important; }
 
     .brand { margin-bottom: 18px; }
     h1 { margin: 14px 0 4px; }
 
+    /* a seção PODE quebrar entre páginas — evita a folha em branco */
     .section { break-inside: auto; page-break-inside: auto; margin-bottom: 16px; }
     .section-head { break-after: avoid; page-break-after: avoid; }
     .list { break-inside: auto; page-break-inside: auto; }
-    .ev { break-inside: avoid; page-break-inside: avoid; }
+
+    /* só o item individual não se parte ao meio */
+    .item { break-inside: avoid; page-break-inside: avoid; }
 
     .foot { margin-top: 16px; }
   }
 
-  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  /* ---------- navegação entre páginas ---------- */
+  .backlink {
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none; color: var(--ink-soft);
+    font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+    padding: 9px 0; margin-bottom: 6px;
+    transition: color .18s;
+  }
+  .backlink:hover { color: var(--blue); }
+
+  .cta {
+    display: block; text-align: center; text-decoration: none;
+    background: var(--card); border: 1px solid var(--hairline);
+    padding: 22px 18px; margin-top: 34px;
+    transition: border-color .18s;
+  }
+  [data-theme="dark"] .cta { border-color: var(--line); }
+  .cta:hover { border-color: var(--blue); }
+  .cta .k {
+    display: block; font-size: 10px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px;
+  }
+  .cta .v {
+    font-family: 'Caveat', cursive; font-size: clamp(23px, 6vw, 29px);
+    color: var(--blue); line-height: 1.1;
+  }
+  .cta .arrow { font-family: 'Jost', sans-serif; font-size: .62em; margin-left: 6px; }
+
+  @media print { .backlink, .cta { display: none !important; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -291,32 +383,40 @@
 
 <div class="wrap">
 
+  <a class="backlink" href="index.html">&larr; Cronograma do retiro</a>
+
   <div class="brand">
     <img src="data:image/png;base64,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" alt="Unidos — Comunidade do Reino">
     <h1>Retiro <span class="accent">Unidos</span></h1>
-    <p class="subtitle">Cronograma</p>
-    <p class="dates" id="datesLabel"></p>
+    <p class="subtitle">Checklist da viagem</p>
   </div>
+
+  <div class="progress">
+    <div class="progress-top">
+      <span>Progresso</span>
+      <span><b id="pct">0%</b> &nbsp;·&nbsp; <span id="counts">0 / 0</span></span>
+    </div>
+    <div class="bar"><i id="fill"></i></div>
+  </div>
+
+  <div class="done-banner" id="banner">Tudo pronto — boa viagem! ✦</div>
 
   <div id="app"></div>
 
-  <p class="offline-tip">
-    No local <b>não há internet</b> — gere o PDF ou imprima antes de viajar
-  </p>
-
-  <a class="cta" href="checklist.html">
-    <span class="k">Não esqueça nada</span>
-    <span class="v">Checklist da viagem <span class="arrow">→</span></span>
-  </a>
-
   <div class="actions">
+    <button class="btn" id="reset">Desmarcar tudo</button>
     <button class="btn" id="pdf">Gerar PDF</button>
     <button class="btn" id="print">Imprimir</button>
   </div>
 
+  <a class="cta" href="index.html">
+    <span class="k">Programação do fim de semana</span>
+    <span class="v">Ver o cronograma <span class="arrow">&rarr;</span></span>
+  </a>
+
   <p class="foot">
     Unidos · Comunidade do Reino<br>
-    Horários sujeitos a pequenos ajustes
+    As marcações ficam salvas neste navegador
   </p>
 </div>
 
@@ -324,127 +424,129 @@
 (function () {
   'use strict';
 
-  /* ====== CONTEÚDO DO CRONOGRAMA ======
-     Para editar, altere apenas este bloco. */
+  /* ====== CONTEÚDO DO CHECKLIST ======
+     Para editar a lista, altere apenas este bloco.
+     Se mudar itens, suba o número da VERSAO para resetar as marcações antigas. */
+  var VERSAO = 1;
 
-  var RETIRO = { rotulo: '21 a 23 de agosto · 2026' };
-
-  var DIAS = [
+  var CHECKLIST = [
     {
-      titulo: 'Sexta à noite',
-      data: 'Sexta-feira · 21 de agosto',
-      eventos: [
-        { ini: '20h30', fim: '21h30', titulo: 'Jantar' },
-        { ini: '21h30', titulo: 'Louvor e oração no deck', tag: 'Deck',
-          escala: [['Palavra', 'Gabriela']] }
+      titulo: 'Itens pessoais',
+      itens: [
+        'Bíblia',
+        'Roupas confortáveis',
+        'Roupa que possa sujar / molhar',
+        'Agasalhos',
+        'Chinelo',
+        'Lençol, cobertor e travesseiro',
+        'Escova e pasta de dente',
+        'Sabonete, shampoo e condicionador',
+        'Toalha de banho',
+        'Desodorante',
+        'Repelente',
+        'Medicamentos pessoais',
+        { texto: 'Barraca', nota: '(só para os homens)' },
+        { texto: 'Talheres', nota: '(garfo e faca ou colher)' }
       ]
     },
     {
-      titulo: 'Sábado de manhã',
-      data: 'Sábado · 22 de agosto',
-      eventos: [
-        { ini: '07h30', fim: '09h30', titulo: 'Café da manhã' },
-        { ini: '10h00', titulo: 'Culto da manhã', tag: 'Culto',
-          escala: [['Abertura', 'Sara'], ['Palavra', 'Victor']] },
-        { ini: '12h30', fim: '13h30', titulo: 'Almoço' }
-      ]
-    },
-    {
-      titulo: 'Sábado de tarde',
-      data: 'Sábado · 22 de agosto',
-      eventos: [
-        { ini: '15h00', fim: '16h30', titulo: 'Gincana' },
-        { ini: '16h30', fim: '17h15', titulo: 'Café da tarde' }
-      ]
-    },
-    {
-      titulo: 'Sábado à noite',
-      data: 'Sábado · 22 de agosto',
-      eventos: [
-        { ini: '20h00', fim: '21h00', titulo: 'Jantar' },
-        { ini: '21h20', titulo: 'Culto da noite', tag: 'Culto',
-          escala: [['Abertura', 'Sóstenes'], ['Palavra', 'Daniel']] }
-      ]
-    },
-    {
-      titulo: 'Domingo de manhã',
-      data: 'Domingo · 23 de agosto',
-      eventos: [
-        { ini: '07h30', fim: '09h30', titulo: 'Café da manhã' },
-        { ini: '10h00', titulo: 'Culto da manhã', tag: 'Culto',
-          escala: [['Abertura', 'Umberto'], ['Palavra', 'Pr. Edelson']] },
-        { ini: '12h30', fim: '13h30', titulo: 'Almoço' }
+      titulo: 'Opcionais',
+      itens: [
+        { texto: 'Jogos', nota: '(cartas, tabuleiro, etc)' },
+        'Protetor solar',
+        'Roupa de banho para a lagoa',
+        'Garrafa de água',
+        'Doces, biscoitos e guloseimas'
       ]
     }
   ];
   /* ====== FIM DO CONTEÚDO ====== */
 
+  var KEY = 'retiro-unidos.v' + VERSAO;
   var THEME_KEY = 'retiro-unidos.tema';
-  var app = document.getElementById('app');
 
-  document.getElementById('datesLabel').textContent = RETIRO.rotulo;
+  var marcados = carregar();
+
+  var app     = document.getElementById('app');
+  var elPct   = document.getElementById('pct');
+  var elCount = document.getElementById('counts');
+  var elFill  = document.getElementById('fill');
+  var banner  = document.getElementById('banner');
+
+  function carregar() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) { return []; }
+  }
+
+  function salvar() {
+    try { localStorage.setItem(KEY, JSON.stringify(marcados)); }
+    catch (e) { /* modo privado / storage cheio: segue funcionando na sessão */ }
+  }
+
+  function normaliza(it) {
+    return typeof it === 'string' ? { texto: it, nota: '' } : { texto: it.texto, nota: it.nota || '' };
+  }
+
+  function idDe(s, i) { return 's' + s + 'i' + i; }
 
   /* ---------- montagem ---------- */
-  DIAS.forEach(function (dia) {
+  CHECKLIST.forEach(function (secao, si) {
     var sec = document.createElement('section');
     sec.className = 'section';
 
     var head = document.createElement('div');
     head.className = 'section-head';
     var h2 = document.createElement('h2');
-    h2.textContent = dia.titulo;
-    var dt = document.createElement('span');
-    dt.className = 'sec-date';
-    dt.textContent = dia.data;
+    h2.textContent = secao.titulo;
+    var cnt = document.createElement('span');
+    cnt.className = 'sec-count';
+    cnt.dataset.sec = si;
     head.appendChild(h2);
-    head.appendChild(dt);
+    head.appendChild(cnt);
     sec.appendChild(head);
 
     var ul = document.createElement('ul');
     ul.className = 'list';
 
-    dia.eventos.forEach(function (ev) {
+    secao.itens.forEach(function (bruto, ii) {
+      var item = normaliza(bruto);
+      var id = idDe(si, ii);
+
       var li = document.createElement('li');
-      li.className = 'ev';
+      li.className = 'item';
+      li.dataset.id = id;
 
-      var t = document.createElement('div');
-      t.className = 'time';
-      t.appendChild(document.createTextNode(ev.ini));
-      if (ev.fim) {
-        var sub = document.createElement('span');
-        sub.textContent = 'até ' + ev.fim;
-        t.appendChild(sub);
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.id = 'cb-' + id;
+      input.checked = marcados.indexOf(id) !== -1;
+
+      var lab = document.createElement('label');
+      lab.setAttribute('for', 'cb-' + id);
+      lab.style.display = 'contents';
+
+      var box = document.createElement('span');
+      box.className = 'box';
+
+      var txt = document.createElement('span');
+      txt.className = 'label';
+      txt.appendChild(document.createTextNode(item.texto));
+      if (item.nota) {
+        var n = document.createElement('span');
+        n.className = 'note';
+        n.textContent = ' ' + item.nota;
+        txt.appendChild(n);
       }
 
-      var body = document.createElement('div');
+      lab.appendChild(box);
+      lab.appendChild(txt);
+      li.appendChild(input);
+      li.appendChild(lab);
 
-      var ti = document.createElement('div');
-      ti.className = 'title';
-      ti.appendChild(document.createTextNode(ev.titulo));
-      if (ev.tag) {
-        var tg = document.createElement('span');
-        tg.className = 'tag';
-        tg.textContent = ev.tag;
-        ti.appendChild(tg);
-      }
-      body.appendChild(ti);
-
-      if (ev.escala && ev.escala.length) {
-        var box = document.createElement('div');
-        box.className = 'escala';
-        ev.escala.forEach(function (par) {
-          var d = document.createElement('div');
-          d.appendChild(document.createTextNode(par[0] + ': '));
-          var b = document.createElement('b');
-          b.textContent = par[1];
-          d.appendChild(b);
-          box.appendChild(d);
-        });
-        body.appendChild(box);
-      }
-
-      li.appendChild(t);
-      li.appendChild(body);
+      if (input.checked) li.classList.add('done');
       ul.appendChild(li);
     });
 
@@ -452,7 +554,36 @@
     app.appendChild(sec);
   });
 
-  /* ---------- imprimir ---------- */
+  /* ---------- interação ---------- */
+  app.addEventListener('change', function (e) {
+    if (e.target.type !== 'checkbox') return;
+    var li = e.target.closest('.item');
+    var id = li.dataset.id;
+    var pos = marcados.indexOf(id);
+
+    if (e.target.checked) {
+      if (pos === -1) marcados.push(id);
+      li.classList.add('done');
+    } else {
+      if (pos !== -1) marcados.splice(pos, 1);
+      li.classList.remove('done');
+    }
+    salvar();
+    atualizar();
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    if (!marcados.length) return;
+    if (!confirm('Desmarcar todos os itens?')) return;
+    marcados = [];
+    salvar();
+    Array.prototype.forEach.call(app.querySelectorAll('.item'), function (li) {
+      li.classList.remove('done');
+      li.querySelector('input').checked = false;
+    });
+    atualizar();
+  });
+
   document.getElementById('print').addEventListener('click', function () { window.print(); });
 
   /* ---------- gerar PDF ---------- */
@@ -500,7 +631,7 @@
       fontesProntas.then(function () {
         return window.html2pdf().set({
           margin:   [10, 10, 12, 10],
-          filename: 'retiro-unidos-cronograma.pdf',
+          filename: 'retiro-unidos-checklist.pdf',
           image:    { type: 'jpeg', quality: 0.98 },
           html2canvas: {
             scale: 2,
@@ -510,7 +641,7 @@
             scrollY: 0
           },
           jsPDF:    { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['css', 'legacy'], avoid: ['.ev', '.section-head'] }
+          pagebreak: { mode: ['css', 'legacy'], avoid: ['.item', '.section-head'] }
         }).from(document.querySelector('.wrap')).save();
       }).then(function () {
         encerrarPdf(temaAtual);
@@ -520,6 +651,25 @@
       });
     }, falhou);
   });
+
+  /* ---------- progresso ---------- */
+  function atualizar() {
+    var total = 0, feitos = 0;
+
+    CHECKLIST.forEach(function (secao, si) {
+      var t = secao.itens.length, f = 0;
+      for (var i = 0; i < t; i++) if (marcados.indexOf(idDe(si, i)) !== -1) f++;
+      total += t; feitos += f;
+      var c = app.querySelector('.sec-count[data-sec="' + si + '"]');
+      if (c) c.textContent = f + '/' + t;
+    });
+
+    var pct = total ? Math.round((feitos / total) * 100) : 0;
+    elPct.textContent = pct + '%';
+    elCount.textContent = feitos + ' / ' + total;
+    elFill.style.width = pct + '%';
+    banner.classList.toggle('show', total > 0 && feitos === total);
+  }
 
   /* ---------- tema ---------- */
   var btn = document.getElementById('themeBtn');
@@ -538,6 +688,8 @@
   btn.addEventListener('click', function () {
     aplicarTema(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
+
+  atualizar();
 })();
 </script>
 </body>
