@@ -247,6 +247,72 @@
   [data-theme="dark"] .btn:hover { color: #14151A; }
   .btn[disabled] { opacity: .45; cursor: progress; pointer-events: none; }
 
+
+  /* ---------- contagem regressiva (link) ---------- */
+  .countdown {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--card); border: 1px solid var(--hairline);
+    padding: 18px 14px 15px; margin-bottom: 28px;
+    text-align: center;
+    transition: border-color .18s;
+  }
+  [data-theme="dark"] .countdown { border-color: var(--line); }
+  .countdown:hover { border-color: var(--blue); }
+  .countdown .cd-k {
+    display: block; margin-bottom: 12px;
+    font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .cd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .cd-u { position: relative; }
+  .cd-u + .cd-u::before {
+    content: ""; position: absolute; left: -3px; top: 14%;
+    width: 1px; height: 52%; background: var(--line);
+  }
+  .cd-u b {
+    display: block; font-weight: 300;
+    font-size: clamp(24px, 7.4vw, 34px); line-height: 1;
+    color: var(--blue); font-variant-numeric: tabular-nums;
+  }
+  .cd-u span {
+    display: block; margin-top: 7px;
+    font-size: 8.5px; letter-spacing: .17em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .countdown .cd-go {
+    display: block; margin-top: 13px;
+    font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--blue);
+  }
+  .countdown.started .cd-grid { display: none; }
+  .countdown .cd-msg { display: none; }
+  .countdown.started .cd-msg {
+    display: block;
+    font-family: 'Caveat', 'Segoe Script', cursive;
+    font-size: clamp(24px, 6.4vw, 32px); color: var(--blue); line-height: 1.15;
+  }
+
+
+  /* ---------- emojis flutuantes ---------- */
+  #sky {
+    position: fixed; inset: 0;
+    pointer-events: none; overflow: hidden;
+    z-index: 0;
+  }
+  .fly {
+    position: absolute; bottom: -70px;
+    font-size: 24px; line-height: 1; opacity: 0;
+    will-change: transform, opacity;
+    animation: subir linear forwards;
+  }
+  @keyframes subir {
+    0%   { opacity: 0;   transform: translate3d(0, 0, 0) rotate(0deg) scale(.85); }
+    12%  { opacity: .55; }
+    80%  { opacity: .45; }
+    100% { opacity: 0;   transform: translate3d(var(--dx), calc(-100vh - 140px), 0) rotate(var(--rot)) scale(1.05); }
+  }
+  .wrap { position: relative; z-index: 1; }
+
   .theme-toggle {
     position: fixed; top: 14px; right: 14px; z-index: 10;
     width: 40px; height: 40px; border-radius: 50%;
@@ -280,6 +346,8 @@
     background: #fff !important;
     background-image: none !important;
   }
+  body.exporting #sky,
+  body.exporting .countdown,
   body.exporting .theme-toggle,
   body.exporting .actions,
   body.exporting .progress,
@@ -321,7 +389,7 @@
     body { padding: 0; background-image: none !important; }
     .wrap { max-width: 100%; }
 
-    .theme-toggle, .actions, .progress, .done-banner { display: none !important; }
+    #sky, .countdown, .theme-toggle, .actions, .progress, .done-banner { display: none !important; }
     [data-theme="dark"] .brand img { filter: none !important; }
     [data-theme="dark"] .section,
     [data-theme="dark"] .section-head,
@@ -379,6 +447,8 @@
 </head>
 <body>
 
+<div id="sky" aria-hidden="true"></div>
+
 <button class="theme-toggle" id="themeBtn" aria-label="Alternar tema">🌙</button>
 
 <div class="wrap">
@@ -390,6 +460,18 @@
     <h1>Retiro <span class="accent">Unidos</span></h1>
     <p class="subtitle">Checklist da viagem</p>
   </div>
+
+  <a class="countdown" id="countdown" href="cronometro.html">
+    <span class="cd-k" id="cdLead">Falta pouco para o retiro</span>
+    <span class="cd-grid">
+      <span class="cd-u"><b id="cdD">--</b><span id="cdLD">dias</span></span>
+      <span class="cd-u"><b id="cdH">--</b><span id="cdLH">horas</span></span>
+      <span class="cd-u"><b id="cdM">--</b><span id="cdLM">min</span></span>
+      <span class="cd-u"><b id="cdS">--</b><span id="cdLS">seg</span></span>
+    </span>
+    <span class="cd-msg" id="cdMsg"></span>
+    <span class="cd-go">Ver contagem completa &rarr;</span>
+  </a>
 
   <div class="progress">
     <div class="progress-top">
@@ -690,6 +772,81 @@
   });
 
   atualizar();
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var ALVO = new Date('2026-08-21T18:00:00-03:00').getTime();
+  var FIM  = new Date('2026-08-23T14:00:00-03:00').getTime();
+
+  var box = document.getElementById('countdown');
+  if (!box) return;
+
+  var elD = document.getElementById('cdD'), elH = document.getElementById('cdH');
+  var elM = document.getElementById('cdM'), elS = document.getElementById('cdS');
+  var lead = document.getElementById('cdLead'), msg = document.getElementById('cdMsg');
+
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+  function plural(n, a, b) { return n === 1 ? a : b; }
+
+  var timer = setInterval(tick, 1000);
+  tick();
+
+  function tick() {
+    var agora = Date.now();
+    var falta = ALVO - agora;
+
+    if (falta <= 0) {
+      box.classList.add('started');
+      lead.textContent = agora < FIM ? 'Estamos no retiro' : 'Retiro Unidos';
+      msg.textContent  = agora < FIM ? 'O retiro começou!' : 'Até o próximo!';
+      clearInterval(timer);
+      return;
+    }
+
+    var seg = Math.floor(falta / 1000);
+    var d = Math.floor(seg / 86400);
+    var h = Math.floor((seg % 86400) / 3600);
+    var m = Math.floor((seg % 3600) / 60);
+    var s = seg % 60;
+
+    elD.textContent = pad(d);
+    elH.textContent = pad(h);
+    elM.textContent = pad(m);
+    elS.textContent = pad(s);
+    document.getElementById('cdLD').textContent = plural(d, 'dia', 'dias');
+    document.getElementById('cdLH').textContent = plural(h, 'hora', 'horas');
+    lead.textContent = d > 0 ? 'Faltam para o retiro' : 'É hoje!';
+  }
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var sky = document.getElementById('sky');
+  if (!sky) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var EMOJIS = ['🙏','✨','🕊️','❤️','🎉','🔥','🤝','📖','🎸','⛺','🌿','😊','🌅','🤍','🎶','☀️'];
+  var MAX = 12;
+
+  function soltar() {
+    if (document.hidden || sky.childElementCount >= MAX) return;
+    var el = document.createElement('span');
+    el.className = 'fly';
+    el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+    el.style.left = (Math.random() * 92 + 2) + '%';
+    el.style.fontSize = (18 + Math.random() * 16) + 'px';
+    el.style.animationDuration = (14 + Math.random() * 9) + 's';
+    el.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+    el.style.setProperty('--rot', (Math.random() * 50 - 25) + 'deg');
+    el.addEventListener('animationend', function () { el.remove(); });
+    sky.appendChild(el);
+  }
+
+  for (var i = 0; i < 4; i++) setTimeout(soltar, i * 900);
+  setInterval(soltar, 1400);
 })();
 </script>
 </body>

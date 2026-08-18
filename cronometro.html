@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contagem regressiva · Retiro Unidos - CDR</title>
+<meta name="description" content="Quanto falta para o Retiro Unidos — Comunidade do Reino.">
+<meta name="theme-color" content="#F2F1EC">
+<link rel="canonical" href="https://cdr-retiro.netlify.app/cronometro.html">
+<link rel="icon" href="og.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Retiro Unidos - CDR">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://cdr-retiro.netlify.app/cronometro.html">
+<meta property="og:title" content="Contagem regressiva · Retiro Unidos - CDR">
+<meta property="og:description" content="Quanto falta para o Retiro Unidos — 21 a 23 de agosto.">
+<meta property="og:image" content="https://cdr-retiro.netlify.app/og.png">
+<meta property="og:image:secure_url" content="https://cdr-retiro.netlify.app/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Retiro Unidos — Comunidade do Reino">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contagem regressiva · Retiro Unidos - CDR">
+<meta name="twitter:description" content="Quanto falta para o Retiro Unidos — 21 a 23 de agosto.">
+<meta name="twitter:image" content="https://cdr-retiro.netlify.app/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:      #F2F1EC;
+    --card:       #FDFCF9;
+    --band:       #E4E5DE;
+    --line:       #C9C7BF;
+    --hairline:   #1A1A1A;
+    --ink:        #1E1E1E;
+    --ink-soft:   #6A6A63;
+    --blue:       #2A20C9;
+    --blue-deep:  #1B1490;
+  }
+  [data-theme="dark"] {
+    --paper:      #14151A;
+    --card:       #1B1D23;
+    --band:       #262931;
+    --line:       #3A3D46;
+    --hairline:   #3A3D46;
+    --ink:        #ECEBE6;
+    --ink-soft:   #9A9C9F;
+    --blue:       #8E88FF;
+    --blue-deep:  #B4AFFF;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body { min-height: 100%; }
+
+  body {
+    margin: 0;
+    padding: 46px 18px 56px;
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(0,0,0,.020) 0 1px, transparent 1px),
+      radial-gradient(circle at 72% 46%, rgba(0,0,0,.016) 0 1px, transparent 1px),
+      radial-gradient(circle at 40% 82%, rgba(0,0,0,.018) 0 1px, transparent 1px);
+    background-size: 130px 130px, 190px 190px, 160px 160px;
+    color: var(--ink);
+    font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex; flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    transition: background-color .25s, color .25s;
+  }
+
+  /* ---------- emojis flutuantes ---------- */
+  #sky {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .fly {
+    position: absolute;
+    bottom: -70px;
+    font-size: 26px;
+    line-height: 1;
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: subir linear forwards;
+  }
+  @keyframes subir {
+    0%   { opacity: 0;  transform: translate3d(0, 0, 0) rotate(0deg) scale(.85); }
+    12%  { opacity: .85; }
+    80%  { opacity: .7; }
+    100% { opacity: 0;  transform: translate3d(var(--dx), calc(-100vh - 140px), 0) rotate(var(--rot)) scale(1.05); }
+  }
+
+  .wrap {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 620px;
+    margin: auto;
+    text-align: center;
+  }
+
+  /* ---------- topo ---------- */
+  .brand img { width: 180px; max-width: 56%; height: auto; opacity: .92; }
+  [data-theme="dark"] .brand img { filter: invert(1) hue-rotate(180deg) brightness(1.18); opacity: .9; }
+
+  h1 {
+    margin: 24px 0 4px;
+    font-weight: 300;
+    font-size: clamp(28px, 7.6vw, 48px);
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+  h1 .accent { color: var(--blue); font-weight: 600; }
+
+  .subtitle {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(11px, 3vw, 15px);
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- contador ---------- */
+  .lead {
+    margin: 40px 0 16px;
+    font-size: 10.5px; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .clock {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    padding: 26px 10px 22px;
+  }
+  [data-theme="dark"] .clock { border-color: var(--line); }
+
+  .unit { position: relative; }
+  .unit + .unit::before {
+    content: ""; position: absolute; left: -4px; top: 12%;
+    width: 1px; height: 56%; background: var(--line);
+  }
+  .unit b {
+    display: block;
+    font-weight: 300;
+    font-size: clamp(34px, 11vw, 60px);
+    line-height: 1;
+    color: var(--blue);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .02em;
+  }
+  .unit span {
+    display: block; margin-top: 10px;
+    font-size: 9.5px; letter-spacing: .19em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .target {
+    margin: 18px 0 0;
+    font-family: 'Caveat', 'Segoe Script', cursive;
+    font-size: clamp(22px, 5.6vw, 29px);
+    color: var(--blue);
+    line-height: 1.2;
+  }
+
+  /* estado: já começou */
+  .clock.started {
+    display: block;
+    padding: 34px 22px;
+  }
+  .started-msg {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(28px, 8vw, 44px);
+    color: var(--blue);
+    line-height: 1.15;
+  }
+  .started-sub {
+    margin-top: 10px;
+    font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- links ---------- */
+  .ig {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 34px;
+    text-decoration: none;
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    color: var(--ink);
+    padding: 15px 26px;
+    font-size: 11px; letter-spacing: .17em; text-transform: uppercase;
+    transition: background .18s, color .18s, border-color .18s;
+  }
+  [data-theme="dark"] .ig { border-color: var(--line); }
+  .ig:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+  [data-theme="dark"] .ig:hover { color: #14151A; }
+  .ig svg { width: 17px; height: 17px; flex: 0 0 auto; }
+
+  .links {
+    margin-top: 30px;
+    display: flex; gap: 10px 26px; justify-content: center; flex-wrap: wrap;
+  }
+  .links a {
+    color: var(--ink-soft); text-decoration: none;
+    font-size: 10.5px; letter-spacing: .17em; text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 3px;
+    transition: color .18s, border-color .18s;
+  }
+  .links a:hover { color: var(--blue); border-color: var(--blue); }
+
+  .theme-toggle {
+    position: fixed; top: 14px; right: 14px; z-index: 3;
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    cursor: pointer; font-size: 15px; line-height: 1;
+    display: grid; place-items: center;
+    transition: border-color .18s;
+  }
+  .theme-toggle:hover { border-color: var(--blue); }
+
+  .foot {
+    position: relative; z-index: 1;
+    text-align: center; margin: 46px 0 0;
+    font-size: 10px; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--ink-soft); line-height: 2;
+  }
+
+  @media (min-width: 720px) {
+    .clock { gap: 14px; padding: 32px 18px 26px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #sky { display: none; }
+    * { animation: none !important; transition: none !important; }
+  }
+
+  @media print {
+    #sky, .theme-toggle { display: none !important; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div id="sky" aria-hidden="true"></div>
+
+<button class="theme-toggle" id="themeBtn" aria-label="Alternar tema">🌙</button>
+
+<div class="wrap">
+
+  <div class="brand">
+    <img src="data:image/png;base64,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" alt="Unidos — Comunidade do Reino">
+    <h1>Retiro <span class="accent">Unidos</span></h1>
+    <p class="subtitle">21 a 23 de agosto</p>
+  </div>
+
+  <p class="lead" id="lead">Falta pouco</p>
+
+  <div class="clock" id="clock" role="timer" aria-live="polite">
+    <div class="unit"><b id="d">--</b><span id="ld">dias</span></div>
+    <div class="unit"><b id="h">--</b><span id="lh">horas</span></div>
+    <div class="unit"><b id="m">--</b><span id="lm">minutos</span></div>
+    <div class="unit"><b id="s">--</b><span id="ls">segundos</span></div>
+  </div>
+
+  <p class="target" id="target">Sexta, 21 de agosto às 18h</p>
+
+  <a class="ig" href="https://www.instagram.com/unidos_cdr/" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+      <circle cx="12" cy="12" r="4"></circle>
+      <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"></circle>
+    </svg>
+    @unidos_cdr
+  </a>
+
+  <div class="links">
+    <a href="index.html">Cronograma</a>
+    <a href="checklist.html">Checklist da viagem</a>
+  </div>
+</div>
+
+<p class="foot">
+  Unidos · Comunidade do Reino
+</p>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ====== ALVO DA CONTAGEM ======
+     Fuso fixo (-03:00) para o contador bater igual em qualquer aparelho. */
+  var ALVO = new Date('2026-08-21T18:00:00-03:00').getTime();
+  var FIM  = new Date('2026-08-23T14:00:00-03:00').getTime();
+  /* ====== FIM ====== */
+
+  var THEME_KEY = 'retiro-unidos.tema';
+
+  var elD = document.getElementById('d');
+  var elH = document.getElementById('h');
+  var elM = document.getElementById('m');
+  var elS = document.getElementById('s');
+  var relogio = document.getElementById('clock');
+  var lead = document.getElementById('lead');
+  var alvoTxt = document.getElementById('target');
+
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+  function plural(n, sing, plur) { return n === 1 ? sing : plur; }
+
+  function encerrar(msg, sub) {
+    relogio.className = 'clock started';
+    relogio.innerHTML = '';
+    var a = document.createElement('div');
+    a.className = 'started-msg';
+    a.textContent = msg;
+    var b = document.createElement('div');
+    b.className = 'started-sub';
+    b.textContent = sub;
+    relogio.appendChild(a);
+    relogio.appendChild(b);
+    lead.textContent = '';
+    alvoTxt.style.display = 'none';
+    if (timer) clearInterval(timer);
+  }
+
+  function tick() {
+    var agora = Date.now();
+    var falta = ALVO - agora;
+
+    if (falta <= 0) {
+      if (agora < FIM) encerrar('O retiro começou!', 'Aproveite cada momento');
+      else encerrar('Até o próximo!', 'Que Deus abençoe a caminhada');
+      return;
+    }
+
+    var seg = Math.floor(falta / 1000);
+    var d = Math.floor(seg / 86400);
+    var h = Math.floor((seg % 86400) / 3600);
+    var m = Math.floor((seg % 3600) / 60);
+    var s = seg % 60;
+
+    elD.textContent = pad(d);
+    elH.textContent = pad(h);
+    elM.textContent = pad(m);
+    elS.textContent = pad(s);
+
+    document.getElementById('ld').textContent = plural(d, 'dia', 'dias');
+    document.getElementById('lh').textContent = plural(h, 'hora', 'horas');
+    document.getElementById('lm').textContent = plural(m, 'minuto', 'minutos');
+    document.getElementById('ls').textContent = plural(s, 'segundo', 'segundos');
+
+    lead.textContent = d > 1 ? 'Faltam' : 'Falta pouco';
+  }
+
+  var timer = setInterval(tick, 1000);
+  tick();
+
+  /* ---------- emojis flutuantes ---------- */
+  var EMOJIS = ['🙏','✨','🕊️','❤️','🎉','🔥','🤝','📖','🎸','⛺','🌿','😊','🌅','🤍','🎶','☀️'];
+  var sky = document.getElementById('sky');
+  var reduzir = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MAX = 16;
+
+  function soltar() {
+    if (document.hidden || sky.childElementCount >= MAX) return;
+
+    var el = document.createElement('span');
+    el.className = 'fly';
+    el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+
+    var dur = 12 + Math.random() * 8;
+    el.style.left = (Math.random() * 92 + 2) + '%';
+    el.style.fontSize = (20 + Math.random() * 18) + 'px';
+    el.style.animationDuration = dur + 's';
+    el.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+    el.style.setProperty('--rot', (Math.random() * 50 - 25) + 'deg');
+
+    el.addEventListener('animationend', function () { el.remove(); });
+    sky.appendChild(el);
+  }
+
+  if (!reduzir) {
+    for (var i = 0; i < 6; i++) setTimeout(soltar, i * 700);
+    setInterval(soltar, 1100);
+  }
+
+  /* ---------- tema ---------- */
+  var btn = document.getElementById('themeBtn');
+
+  function aplicarTema(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    btn.textContent = t === 'dark' ? '☀' : '🌙';
+    try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
+  }
+
+  var temaSalvo = null;
+  try { temaSalvo = localStorage.getItem(THEME_KEY); } catch (e) {}
+  aplicarTema(temaSalvo || (window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+
+  btn.addEventListener('click', function () {
+    aplicarTema(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+})();
+</script>
+</body>
+</html>
